@@ -1,3 +1,19 @@
+<?php
+
+require 'vendor/autoload.php';
+
+$dsn = 'mysql:dbname=pokedex;host=127.0.0.1';
+$user = 'admin';
+$password = 'adminpwd';
+
+$dbh = new PDO($dsn, $user, $password);
+
+$sql = "SELECT * FROM `pokemon`";
+$statement = $dbh->prepare($sql);
+$statement->execute();
+$result = $statement->fetchAll();
+dump($result);
+?>
 <!doctype html>
 <html lang="fr">
 <head>
@@ -12,18 +28,18 @@
         <a class="navbar-brand" href="#">Pokedex</a>
     </nav>
     <main class="container d-flex flex-wrap">
-        <?php for($i = 1; $i <= 151; $i++): ?>
+        <?php foreach($result as $pokemon): ?>
             <article class="col-6 col-md-4 col-lg-3 p-1 pokemon">
                 <div class="card shadow type-grass text-light">
-                    <img src="images/001.png" class="card-img-top p-3">
+                    <img src="<?= $pokemon['image'] ?>" class="card-img-top p-3">
                     <div class="card-body px-0">
                         <h2 class="card-title h6 text-center m-0">
-                            <a href="detail.php?<?= $i ?>" class="link-light text-decoration-none stretched-link">#<?= $i ?> Bulbizarre</a>    
+                            <a href="detail.php?<?= $i ?>" class="link-light text-decoration-none stretched-link">#<?= $pokemon['number'] ?> <?= $pokemon['name'] ?></a>    
                         </h2>
                     </div>
                 </div>
             </article>
-        <?php endfor ?>
+        <?php endforeach ?>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
